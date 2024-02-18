@@ -1,16 +1,18 @@
 ## Objective
-- Let gpt know about area information, so [execute_services](https://github.com/jekalmin/extended_openai_conversation/tree/v1.0.2/examples/function/area#execute_services) can be called using `area_id`
+
+- Let gpt know about area information, so [execute_services](https://github.com/delfu/local_llama/tree/v1.0.2/examples/function/area#execute_services) can be called using `area_id`
 - Use area awareness feature like [Year of Voice Chapter 5](https://www.home-assistant.io/blog/2023/12/13/year-of-the-voice-chapter-5/#area-awareness)
 
 ## How to use area awareness?
+
 1. Assign area to your ESP-S3-BOX or Atom echo.
 2. Copy and paste prompt below.
 3. Ask "turn on light", "turn off light"
 
-
 ## Prompt
 
 ### 1. List areas and entities separately
+
 ````yaml
 I want you to act as smart home manager of Home Assistant.
 I will provide information of smart home along with a question, you will truthfully make correction or answer using information provided in one sentence in everyday language.
@@ -43,6 +45,7 @@ Make decisions based on current area first.
 ````
 
 ### 2. Categorize entities by areas
+
 ````yaml
 I want you to act as smart home manager of Home Assistant.
 I will provide information of smart home along with a question, you will truthfully make correction or answer using information provided in one sentence in everyday language.

@@ -1,14 +1,13 @@
-
-
 ## Objective
+
 - Call service via area_id
 
-<img width="300" src="https://github.com/jekalmin/extended_openai_conversation/assets/2917984/78a5c829-a6b4-4f76-8c68-9fe0ccdca2e8">
-
+<img width="300" src="https://github.com/delfu/local_llama/assets/2917984/78a5c829-a6b4-4f76-8c68-9fe0ccdca2e8">
 
 ## Function
 
 ### execute_services
+
 ```yaml
 - spec:
     name: execute_services
@@ -42,9 +41,9 @@
                       type: string
                       description: The id retrieved from areas. You can specify only area_id without entity_id to act on all entities in that area
             required:
-            - domain
-            - service
-            - service_data
+              - domain
+              - service
+              - service_data
   function:
     type: native
     name: execute_service

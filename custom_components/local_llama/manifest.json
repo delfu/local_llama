@@ -1,0 +1,23 @@
+{
+  "domain": "local_llama",
+  "name": "Local Llama",
+  "codeowners": [
+    "@delfu"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "conversation",
+    "history",
+    "recorder",
+    "rest",
+    "scrape"
+  ],
+  "documentation": "https://github.com/delfu/local_llama",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/delfu/local_llama/issues",
+  "requirements": [
+    "ollama~=0.1.6"
+  ],
+  "version": "0.0.1"
+}

@@ -1,9 +1,11 @@
 ## Objective
-<img width="300" src="https://github.com/jekalmin/extended_openai_conversation/assets/2917984/89060728-4703-4e57-8423-354cdc47f0ee">
+
+<img width="300" src="https://github.com/delfu/local_llama/assets/2917984/89060728-4703-4e57-8423-354cdc47f0ee">
 
 ## Function
 
 ### add_item_to_list
+
 ```yaml
 - spec:
     name: add_item_to_list
@@ -21,19 +23,20 @@
             - todo.shopping_list
             - todo.to_do
       required:
-      - item
-      - list
+        - item
+        - list
   function:
     type: script
     sequence:
-    - service: todo.add_item
-      data:
-        item: '{{item}}'
-      target:
-        entity_id: '{{list}}'
+      - service: todo.add_item
+        data:
+          item: "{{item}}"
+        target:
+          entity_id: "{{list}}"
 ```
 
 ### remove_item_from_list
+
 ```yaml
 - spec:
     name: remove_item_from_list
@@ -51,20 +54,21 @@
             - todo.shopping_list
             - todo.to_do
       required:
-      - item
-      - list
+        - item
+        - list
   function:
     type: script
     sequence:
-    - service: todo.update_item
-      data:
-        item: '{{item}}'
-        status: 'completed'
-      target:
-        entity_id: '{{list}}'
+      - service: todo.update_item
+        data:
+          item: "{{item}}"
+          status: "completed"
+        target:
+          entity_id: "{{list}}"
 ```
 
 ### get_items_from_list
+
 ```yaml
 - spec:
     name: get_items_from_list
@@ -79,14 +83,14 @@
             - todo.shopping_list
             - todo.to_do
       required:
-      - list
+        - list
   function:
     type: script
     sequence:
-    - service: todo.get_items
-      data:
-        status: 'needs_action'
-      target:
-        entity_id: '{{list}}'
-      response_variable: _function_result
+      - service: todo.get_items
+        data:
+          status: "needs_action"
+        target:
+          entity_id: "{{list}}"
+        response_variable: _function_result
 ```

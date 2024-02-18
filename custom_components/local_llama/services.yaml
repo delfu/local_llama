@@ -4,9 +4,9 @@ query_image:
       required: true
       selector:
         config_entry:
-          integration: extended_openai_conversation
+          integration: local_llama
     model:
-      example: gpt-4-vision-preview
+      example: mistral
       selector:
         text:
     prompt:

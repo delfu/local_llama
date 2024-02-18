@@ -87,7 +87,8 @@ def _convert_to_template(settings, template_keys, hass, parents: list[str]):
     if isinstance(settings, dict):
         for key, value in settings.items():
             if isinstance(value, str) and (
-                key in template_keys or set(parents).intersection(template_keys)
+                key in template_keys or set(
+                    parents).intersection(template_keys)
             ):
                 settings[key] = Template(value, hass)
             if isinstance(value, dict):
@@ -108,7 +109,8 @@ def _get_rest_data(hass, rest_config, arguments):
     rest_config.setdefault(CONF_METHOD, rest.const.DEFAULT_METHOD)
     rest_config.setdefault(CONF_VERIFY_SSL, rest.const.DEFAULT_VERIFY_SSL)
     rest_config.setdefault(CONF_TIMEOUT, rest.data.DEFAULT_TIMEOUT)
-    rest_config.setdefault(rest.const.CONF_ENCODING, rest.const.DEFAULT_ENCODING)
+    rest_config.setdefault(rest.const.CONF_ENCODING,
+                           rest.const.DEFAULT_ENCODING)
 
     convert_to_template(
         rest_config,
@@ -116,7 +118,8 @@ def _get_rest_data(hass, rest_config, arguments):
         hass=hass,
     )
 
-    resource_template: Template | None = rest_config.get(CONF_RESOURCE_TEMPLATE)
+    resource_template: Template | None = rest_config.get(
+        CONF_RESOURCE_TEMPLATE)
     if resource_template is not None:
         rest_config.pop(CONF_RESOURCE_TEMPLATE)
         rest_config[CONF_RESOURCE] = resource_template.async_render(
@@ -227,7 +230,8 @@ class NativeFunctionExecutor(FunctionExecutor):
         service_data = service_argument.get(
             "service_data", service_argument.get("data", {})
         )
-        entity_id = service_data.get("entity_id", service_argument.get("entity_id"))
+        entity_id = service_data.get(
+            "entity_id", service_argument.get("entity_id"))
         area_id = service_data.get("area_id")
         device_id = service_data.get("device_id")
 
@@ -299,7 +303,8 @@ class NativeFunctionExecutor(FunctionExecutor):
             "a" if current_automations else "w",
             encoding="utf-8",
         ) as f:
-            raw_config = yaml.dump(automations, allow_unicode=True, sort_keys=False)
+            raw_config = yaml.dump(
+                automations, allow_unicode=True, sort_keys=False)
             f.write("\n" + raw_config)
 
         await hass.services.async_call(automation.config.DOMAIN, SERVICE_RELOAD)
@@ -320,15 +325,19 @@ class NativeFunctionExecutor(FunctionExecutor):
         start_time = arguments.get("start_time")
         end_time = arguments.get("end_time")
         entity_ids = arguments.get("entity_ids", [])
-        include_start_time_state = arguments.get("include_start_time_state", True)
-        significant_changes_only = arguments.get("significant_changes_only", True)
+        include_start_time_state = arguments.get(
+            "include_start_time_state", True)
+        significant_changes_only = arguments.get(
+            "significant_changes_only", True)
         minimal_response = arguments.get("minimal_response", True)
         no_attributes = arguments.get("no_attributes", True)
 
         now = dt_util.utcnow()
         one_day = timedelta(days=1)
-        start_time = self.as_utc(start_time, now - one_day, "start_time not valid")
-        end_time = self.as_utc(end_time, start_time + one_day, "end_time not valid")
+        start_time = self.as_utc(
+            start_time, now - one_day, "start_time not valid")
+        end_time = self.as_utc(end_time, start_time +
+                               one_day, "end_time not valid")
 
         self.validate_entity_ids(hass, entity_ids, exposed_entities)
 
@@ -381,9 +390,9 @@ class ScriptFunctionExecutor(FunctionExecutor):
         script = Script(
             hass,
             function["sequence"],
-            "extended_openai_conversation",
+            "local_llama",
             DOMAIN,
-            running_description="[extended_openai_conversation] function",
+            running_description="[local_llama] function",
             logger=_LOGGER,
         )
 
@@ -396,7 +405,8 @@ class ScriptFunctionExecutor(FunctionExecutor):
 class TemplateFunctionExecutor(FunctionExecutor):
     def __init__(self) -> None:
         """initialize template function"""
-        super().__init__(vol.Schema({vol.Required("value_template"): cv.template}))
+        super().__init__(vol.Schema(
+            {vol.Required("value_template"): cv.template}))
 
     async def execute(
         self,
@@ -448,7 +458,8 @@ class ScrapeFunctionExecutor(FunctionExecutor):
     def __init__(self) -> None:
         """initialize Scrape function"""
         super().__init__(
-            scrape.COMBINED_SCHEMA.extend({vol.Optional("value_template"): cv.template})
+            scrape.COMBINED_SCHEMA.extend(
+                {vol.Optional("value_template"): cv.template})
         )
 
     async def execute(
@@ -609,7 +620,8 @@ class SqliteFunctionExecutor(FunctionExecutor):
         raise HomeAssistantError(msg)
 
     def get_default_db_url(self, hass: HomeAssistant) -> str:
-        db_file_path = os.path.join(hass.config.config_dir, recorder.DEFAULT_DB_FILE)
+        db_file_path = os.path.join(
+            hass.config.config_dir, recorder.DEFAULT_DB_FILE)
         return f"file:{db_file_path}?mode=ro"
 
     def set_url_read_only(self, url: str) -> str:

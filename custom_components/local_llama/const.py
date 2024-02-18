@@ -1,14 +1,14 @@
-"""Constants for the Extended OpenAI Conversation integration."""
+"""Constants for the Local Llama integration."""
 
-DOMAIN = "extended_openai_conversation"
-DEFAULT_NAME = "Extended OpenAI Conversation"
+DOMAIN = "local_llama"
+DEFAULT_NAME = "Local Llama"
 CONF_BASE_URL = "base_url"
 DEFAULT_CONF_BASE_URL = "https://api.openai.com/v1"
 CONF_API_VERSION = "api_version"
 CONF_SKIP_AUTHENTICATION = "skip_authentication"
 DEFAULT_SKIP_AUTHENTICATION = False
 
-EVENT_AUTOMATION_REGISTERED = "automation_registered_via_extended_openai_conversation"
+EVENT_AUTOMATION_REGISTERED = "automation_registered_via_local_llama"
 
 CONF_PROMPT = "prompt"
 DEFAULT_PROMPT = """I want you to act as smart home manager of Home Assistant.
