@@ -7,7 +7,6 @@ import yaml
 from types import MappingProxyType
 from typing import Any
 
-from openai._exceptions import APIConnectionError, AuthenticationError
 import voluptuous as vol
 
 from homeassistant import config_entries
@@ -24,8 +23,6 @@ from homeassistant.helpers.selector import (
     SelectOptionDict,
     SelectSelectorMode,
 )
-
-from .helpers import validate_authentication
 
 from .const import (
     CONF_ATTACH_USERNAME,
@@ -108,14 +105,6 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
         base_url = None
         data.pop(CONF_BASE_URL)
 
-    await validate_authentication(
-        hass=hass,
-        api_key=api_key,
-        base_url=base_url,
-        api_version=api_version,
-        skip_authentication=skip_authentication,
-    )
-
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for OpenAI Conversation."""
@@ -135,10 +124,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         try:
             await validate_input(self.hass, user_input)
-        except APIConnectionError:
-            errors["base"] = "cannot_connect"
-        except AuthenticationError:
-            errors["base"] = "invalid_auth"
         except Exception:  # pylint: disable=broad-except
             _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
@@ -228,7 +213,8 @@ class OptionsFlow(config_entries.OptionsFlow):
             ): TemplateSelector(),
             vol.Optional(
                 CONF_ATTACH_USERNAME,
-                description={"suggested_value": options.get(CONF_ATTACH_USERNAME)},
+                description={"suggested_value": options.get(
+                    CONF_ATTACH_USERNAME)},
                 default=DEFAULT_ATTACH_USERNAME,
             ): BooleanSelector(),
             vol.Optional(
@@ -238,7 +224,8 @@ class OptionsFlow(config_entries.OptionsFlow):
             ): BooleanSelector(),
             vol.Optional(
                 CONF_CONTEXT_THRESHOLD,
-                description={"suggested_value": options.get(CONF_CONTEXT_THRESHOLD)},
+                description={"suggested_value": options.get(
+                    CONF_CONTEXT_THRESHOLD)},
                 default=DEFAULT_CONTEXT_THRESHOLD,
             ): int,
             vol.Optional(
@@ -250,7 +237,8 @@ class OptionsFlow(config_entries.OptionsFlow):
             ): SelectSelector(
                 SelectSelectorConfig(
                     options=[
-                        SelectOptionDict(value=strategy["key"], label=strategy["label"])
+                        SelectOptionDict(
+                            value=strategy["key"], label=strategy["label"])
                         for strategy in CONTEXT_TRUNCATE_STRATEGIES
                     ],
                     mode=SelectSelectorMode.DROPDOWN,

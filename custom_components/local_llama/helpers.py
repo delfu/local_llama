@@ -4,7 +4,6 @@ import os
 import yaml
 import time
 import sqlite3
-from openai import AsyncOpenAI, AsyncAzureOpenAI
 import re
 import voluptuous as vol
 from bs4 import BeautifulSoup
@@ -59,20 +58,11 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-AZURE_DOMAIN_PATTERN = r"\.openai\.azure\.com"
-
-
 def get_function_executor(value: str):
     function_executor = FUNCTION_EXECUTORS.get(value)
     if function_executor is None:
         raise FunctionNotFound(value)
     return function_executor
-
-
-def is_azure(base_url: str):
-    if base_url and re.search(AZURE_DOMAIN_PATTERN, base_url):
-        return True
-    return False
 
 
 def convert_to_template(
@@ -127,26 +117,6 @@ def _get_rest_data(hass, rest_config, arguments):
         )
 
     return rest.create_rest_data_from_config(hass, rest_config)
-
-
-async def validate_authentication(
-    hass: HomeAssistant,
-    api_key: str,
-    base_url: str,
-    api_version: str,
-    skip_authentication=False,
-) -> None:
-    if skip_authentication:
-        return
-
-    if is_azure(base_url):
-        client = AsyncAzureOpenAI(
-            api_key=api_key, azure_endpoint=base_url, api_version=api_version
-        )
-    else:
-        client = AsyncOpenAI(api_key=api_key, base_url=base_url)
-
-    await client.models.list(timeout=10)
 
 
 class FunctionExecutor(ABC):

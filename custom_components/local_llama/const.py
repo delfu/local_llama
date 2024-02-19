@@ -3,7 +3,7 @@
 DOMAIN = "local_llama"
 DEFAULT_NAME = "Local Llama"
 CONF_BASE_URL = "base_url"
-DEFAULT_CONF_BASE_URL = "https://api.openai.com/v1"
+DEFAULT_CONF_BASE_URL = "http://localhost:11434"
 CONF_API_VERSION = "api_version"
 CONF_SKIP_AUTHENTICATION = "skip_authentication"
 DEFAULT_SKIP_AUTHENTICATION = False
@@ -30,7 +30,7 @@ Do not execute service without user's confirmation.
 Do not restate or appreciate what user says, rather make a quick inquiry.
 """
 CONF_CHAT_MODEL = "chat_model"
-DEFAULT_CHAT_MODEL = "gpt-3.5-turbo-1106"
+DEFAULT_CHAT_MODEL = "mistral"
 CONF_MAX_TOKENS = "max_tokens"
 DEFAULT_MAX_TOKENS = 150
 CONF_TOP_P = "top_p"
