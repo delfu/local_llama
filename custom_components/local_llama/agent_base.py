@@ -14,6 +14,10 @@ from homeassistant.helpers import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.components.homeassistant.exposed_entities import async_should_expose
+from homeassistant.exceptions import (
+    HomeAssistantError,
+    TemplateError,
+)
 
 from .helpers import (
     get_function_executor,
@@ -282,17 +286,6 @@ class BaseAgent(conversation.AbstractConversationAgent):
 
         try:
             response = await self.query(user_input, messages, exposed_entities, 0)
-        except ResponseError as err:
-            _LOGGER.error(err)
-            intent_response = intent.IntentResponse(
-                language=user_input.language)
-            intent_response.async_set_error(
-                intent.IntentResponseErrorCode.UNKNOWN,
-                f"Sorry, I had a problem talking to LLM: {err}",
-            )
-            return conversation.ConversationResult(
-                response=intent_response, conversation_id=conversation_id
-            )
         except HomeAssistantError as err:
             _LOGGER.error(err, exc_info=err)
             intent_response = intent.IntentResponse(
@@ -300,6 +293,17 @@ class BaseAgent(conversation.AbstractConversationAgent):
             intent_response.async_set_error(
                 intent.IntentResponseErrorCode.UNKNOWN,
                 f"Something went wrong: {err}",
+            )
+            return conversation.ConversationResult(
+                response=intent_response, conversation_id=conversation_id
+            )
+        except Error as err:
+            _LOGGER.error(err)
+            intent_response = intent.IntentResponse(
+                language=user_input.language)
+            intent_response.async_set_error(
+                intent.IntentResponseErrorCode.UNKNOWN,
+                f"Sorry, I had a problem talking to LLM: {err}",
             )
             return conversation.ConversationResult(
                 response=intent_response, conversation_id=conversation_id

@@ -166,6 +166,13 @@ class OptionsFlow(config_entries.OptionsFlow):
 
         return {
             vol.Optional(
+                CONF_BASE_URL,
+                description={
+                    "suggested_value": options.get(CONF_BASE_URL, DEFAULT_CONF_BASE_URL)
+                },
+                default=DEFAULT_CONF_BASE_URL,
+            ): str,
+            vol.Optional(
                 CONF_PROMPT,
                 description={"suggested_value": options[CONF_PROMPT]},
                 default=DEFAULT_PROMPT,

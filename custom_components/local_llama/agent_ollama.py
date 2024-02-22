@@ -2,12 +2,10 @@ from __future__ import annotations
 
 from typing import Literal
 import json
-import yaml
 import logging
+import httpx
 
-from homeassistant.const import ATTR_NAME, MATCH_ALL
 from homeassistant.components import conversation
-from homeassistant.util import ulid
 from homeassistant.helpers import (
     intent,
     entity_registry as er,
@@ -15,15 +13,6 @@ from homeassistant.helpers import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.components.homeassistant.exposed_entities import async_should_expose
-from homeassistant.exceptions import (
-    HomeAssistantError,
-    TemplateError,
-)
-
-from .helpers import (
-    get_function_executor,
-)
 
 from .const import (
     CONF_BASE_URL, DEFAULT_CONF_BASE_URL,
@@ -36,20 +25,19 @@ from .const import (
     CONF_USE_TOOLS, DEFAULT_USE_TOOLS,
     CONF_CONTEXT_THRESHOLD, DEFAULT_CONTEXT_THRESHOLD,
     CONF_MAX_FUNCTION_CALLS_PER_CONVERSATION, DEFAULT_MAX_FUNCTION_CALLS_PER_CONVERSATION,
-
 )
 
-from .exceptions import (
-    FunctionNotFound,
-    FunctionLoadFailed,
-    ParseArgumentsFailed,
-    InvalidFunction,
-)
 from .agent_base import BaseAgent, Response
 
 import requests
 
 _LOGGER = logging.getLogger(__package__)
+
+
+async def send_post_request(api_url, payload):
+    async with httpx.AsyncClient() as client:
+        response = await client.post(api_url, json=payload)
+        return response
 
 
 class Agent(BaseAgent):
@@ -122,6 +110,7 @@ class Agent(BaseAgent):
             tool_kwargs = {}
 
         _LOGGER.info("Prompt for %s: %s", model, messages)
+        _LOGGER.error("SOMETHING SOMETHING")
 
         # send request to ollama
 
@@ -133,9 +122,9 @@ class Agent(BaseAgent):
             }
         }
 
-        response = requests.post(self.base_url, json=payload)
+        response = await send_post_request(self.base_url, payload)
 
-        return Response(f'{str(response.status_code)}, {response.json()}')
+        return Response(f'{str(response.status_code)}, {response.text}')
 
         # http://localhost:11434/api/generate
 
