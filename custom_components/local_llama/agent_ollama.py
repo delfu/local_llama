@@ -36,17 +36,19 @@ _LOGGER = logging.getLogger(__package__)
 
 async def send_post_request(api_url, payload):
     async with httpx.AsyncClient() as client:
-        buffer = []
-        parsed_message = ""
         response = await client.post(api_url, json=payload)
-        if (str(response.status_code) == "200"):
-            content = response.text.split("\n")
-            for c in content:
-                if c:
-                    parsed = json.loads(c)
-                    buffer.append(parsed)
-                    parsed_message += parsed["response"]
-        return response.status_code, buffer, parsed_message
+        code = str(response.status_code)
+        if code == "200":
+            content = response.text.strip()
+            parsed = json.loads(content)
+            response_message = parsed["message"]["content"]
+        elif code == "400":
+            content = response.text.strip()
+            parsed = json.loads(content)
+            _LOGGER.error(
+                f'status: {code}, {parsed["error"]}, messages: {json.dumps(payload)}')
+            response_message = parsed["error"]
+        return response.status_code, response_message
 
 
 class Agent(BaseAgent):
@@ -124,15 +126,13 @@ class Agent(BaseAgent):
 
         payload = {
             "model": model,
-            "prompt": "Why is the sky blue?",
-            "options": {
-                "num_ctx": 4096
-            }
+            "messages": messages,
+            "stream": False
         }
 
-        status_code, buffer, parsed_message = await send_post_request(self.base_url, payload)
+        status_code, parsed_message = await send_post_request(self.base_url, payload)
 
-        return Response(f'{str(status_code)}, {json.dumps(buffer)}, {parsed_message}')
+        return Response(f'{str(status_code)}, {parsed_message}')
 
         # http://localhost:11434/api/generate
 

@@ -3,7 +3,7 @@
 DOMAIN = "local_llama"
 DEFAULT_NAME = "Local Llama"
 CONF_BASE_URL = "base_url"
-DEFAULT_CONF_BASE_URL = "http://192.168.0.31:11434/api/generate"
+DEFAULT_CONF_BASE_URL = "http://192.168.0.31:11434/api/chat"
 CONF_API_VERSION = "api_version"
 CONF_SKIP_AUTHENTICATION = "skip_authentication"
 DEFAULT_SKIP_AUTHENTICATION = False
