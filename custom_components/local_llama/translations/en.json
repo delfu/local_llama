@@ -10,7 +10,6 @@
                 "data": {
                     "name": "Name",
                     "api_key": "API Key",
-                    "base_url": "Base Url",
                     "api_version": "Api Version",
                     "skip_authentication": "Skip Authentication"
                 }
@@ -21,6 +20,7 @@
         "step": {
             "init": {
                 "data": {
+                    "base_url": "Base Url",
                     "max_tokens": "Maximum tokens to return in response",
                     "model": "Completion Model",
                     "prompt": "Prompt Template",

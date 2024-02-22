@@ -5,7 +5,6 @@
         "data": {
           "name": "[%key:common::config_flow::data::name%]",
           "api_key": "[%key:common::config_flow::data::api_key%]",
-          "base_url": "[%key:common::config_flow::data::base_url%]",
           "api_version": "[%key:common::config_flow::data::api_version%]",
           "skip_authentication": "[%key:common::config_flow::data::skip_authentication%]"
         }
@@ -21,6 +20,7 @@
     "step": {
       "init": {
         "data": {
+          "base_url": "Base Url",
           "prompt": "Prompt Template",
           "model": "Completion Model",
           "max_tokens": "Maximum tokens to return in response",

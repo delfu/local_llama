@@ -15,7 +15,6 @@ from homeassistant.helpers import (
 )
 
 from .const import (
-    CONF_BASE_URL,
     CONF_API_VERSION,
     CONF_SKIP_AUTHENTICATION,
     DEFAULT_SKIP_AUTHENTICATION,

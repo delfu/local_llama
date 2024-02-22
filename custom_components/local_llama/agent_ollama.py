@@ -26,7 +26,7 @@ from .helpers import (
 )
 
 from .const import (
-    CONF_BASE_URL,
+    CONF_BASE_URL, DEFAULT_CONF_BASE_URL,
 
     CONF_PROMPT, DEFAULT_PROMPT,
     CONF_CHAT_MODEL, DEFAULT_CHAT_MODEL,
@@ -58,7 +58,7 @@ class Agent(BaseAgent):
         self.hass = hass
         self.entry = entry
         self.history: dict[str, list[dict]] = {}
-        base_url = entry.data.get(CONF_BASE_URL)
+        self.base_url = entry.options.get(CONF_BASE_URL, DEFAULT_CONF_BASE_URL)
 
     def _generate_system_message(
         self, exposed_entities, user_input: conversation.ConversationInput
@@ -125,7 +125,19 @@ class Agent(BaseAgent):
 
         # send request to ollama
 
-        return Response(f'{model}, {str(max_tokens)}, {function_call}, {json.dumps(tool_kwargs)}')
+        payload = {
+            "model": model,
+            "prompt": "Why is the sky blue?",
+            "options": {
+                "num_ctx": 4096
+            }
+        }
+
+        response = requests.post(self.base_url, json=payload)
+
+        return Response(f'{str(response.status_code)}, {response.json()}')
+
+        # http://localhost:11434/api/generate
 
         # response: ChatCompletion = await self.client.chat(
         #     model=model,

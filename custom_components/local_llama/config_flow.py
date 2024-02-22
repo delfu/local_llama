@@ -63,7 +63,6 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Optional(CONF_NAME): str,
         vol.Required(CONF_API_KEY): str,
-        vol.Optional(CONF_BASE_URL, default=DEFAULT_CONF_BASE_URL): str,
         vol.Optional(CONF_API_VERSION): str,
         vol.Optional(
             CONF_SKIP_AUTHENTICATION, default=DEFAULT_SKIP_AUTHENTICATION
@@ -75,6 +74,7 @@ DEFAULT_CONF_FUNCTIONS_STR = yaml.dump(DEFAULT_CONF_FUNCTIONS, sort_keys=False)
 
 DEFAULT_OPTIONS = types.MappingProxyType(
     {
+        CONF_BASE_URL: DEFAULT_CONF_BASE_URL,
         CONF_PROMPT: DEFAULT_PROMPT,
         CONF_CHAT_MODEL: DEFAULT_CHAT_MODEL,
         CONF_MAX_TOKENS: DEFAULT_MAX_TOKENS,
@@ -96,14 +96,8 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> None:
     Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
     """
     api_key = data[CONF_API_KEY]
-    base_url = data.get(CONF_BASE_URL)
     api_version = data.get(CONF_API_VERSION)
     skip_authentication = data.get(CONF_SKIP_AUTHENTICATION)
-
-    if base_url == DEFAULT_CONF_BASE_URL:
-        # Do not set base_url if using OpenAI for case of OpenAI's base_url change
-        base_url = None
-        data.pop(CONF_BASE_URL)
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
