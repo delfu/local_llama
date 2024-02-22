@@ -36,8 +36,17 @@ _LOGGER = logging.getLogger(__package__)
 
 async def send_post_request(api_url, payload):
     async with httpx.AsyncClient() as client:
+        buffer = []
+        parsed_message = ""
         response = await client.post(api_url, json=payload)
-        return response
+        if (str(response.status_code) == "200"):
+            content = response.text.split("\n")
+            for c in content:
+                if c:
+                    parsed = json.loads(c)
+                    buffer.append(parsed)
+                    parsed_message += parsed["response"]
+        return response.status_code, buffer, parsed_message
 
 
 class Agent(BaseAgent):
@@ -110,7 +119,6 @@ class Agent(BaseAgent):
             tool_kwargs = {}
 
         _LOGGER.info("Prompt for %s: %s", model, messages)
-        _LOGGER.error("SOMETHING SOMETHING")
 
         # send request to ollama
 
@@ -122,9 +130,9 @@ class Agent(BaseAgent):
             }
         }
 
-        response = await send_post_request(self.base_url, payload)
+        status_code, buffer, parsed_message = await send_post_request(self.base_url, payload)
 
-        return Response(f'{str(response.status_code)}, {response.text}')
+        return Response(f'{str(status_code)}, {json.dumps(buffer)}, {parsed_message}')
 
         # http://localhost:11434/api/generate
 
