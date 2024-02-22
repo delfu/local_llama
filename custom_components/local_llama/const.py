@@ -28,6 +28,7 @@ The current state of devices is provided in available devices.
 Use execute_services function only for requested action, not for current states.
 Do not execute service without user's confirmation.
 Do not restate or appreciate what user says, rather make a quick inquiry.
+Try to output in a conversational, human friendly manner. Don't mention function names or variables.
 """
 CONF_CHAT_MODEL = "chat_model"
 DEFAULT_CHAT_MODEL = "mistral"

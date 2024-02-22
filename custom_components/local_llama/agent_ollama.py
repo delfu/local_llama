@@ -132,7 +132,7 @@ class Agent(BaseAgent):
 
         status_code, parsed_message = await send_post_request(self.base_url, payload)
 
-        return Response(f'{str(status_code)}, {parsed_message}')
+        return Response(f'{str(status_code)}, {parsed_message}', role="assistant")
 
         # http://localhost:11434/api/generate
 
