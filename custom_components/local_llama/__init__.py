@@ -24,7 +24,7 @@ from .const import (
 
 from .services import async_setup_services
 
-from .agent_test import Agent
+from .agent_ollama import Agent
 
 _LOGGER = logging.getLogger(__name__)
 

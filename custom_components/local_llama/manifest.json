@@ -16,6 +16,6 @@
   "integration_type": "service",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/delfu/local_llama/issues",
-  "requirements": ["git+https://github.com/ollama/ollama-python.git#ollama==0.1.6"],
+  "requirements": [],
   "version": "0.0.1"
 }
